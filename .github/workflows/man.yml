@@ -10,16 +10,22 @@ jobs:
         run: |
           curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -o ngrok.zip
           unzip ngrok.zip
-          ./ngrok authtoken 30rzsDDyToJWNLKZ5vcUvdnSMrb_5hg53kcohafbSCR7xkTmA
+          ./ngrok authtoken YOUR_NGROK_TOKEN
 
       - name: Enable SSH
         run: |
           sudo apt-get update
-          sudo apt-get install -y openssh-server
+          sudo apt-get install -y openssh-server jq
           sudo service ssh start
           sudo useradd -m winner001
           echo "winner001:Myrdpy123" | sudo chpasswd
           sudo usermod -aG sudo winner001
-          ./ngrok tcp 22 &
+          ./ngrok tcp 22 > ngrok.log &
           sleep 10
+          echo "========= رابط ngrok (انسخه) ========="
           curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url'
+
+      - name: Keep Alive
+        run: |
+          echo "السيرفر شغال... لن يتوقف"
+          sleep infinity
