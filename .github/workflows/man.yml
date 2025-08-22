@@ -10,8 +10,7 @@ jobs:
         run: |
           curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -o ngrok.zip
           unzip ngrok.zip
-          ./ngrok authtoken YOUR_NGROK_TOKEN
-
+          ./ngrok authtoken 30rzsDDyToJWNLKZ5vcUvdnSMrb_5hg53kcohafbSCR7xkTmA
       - name: Enable SSH
         run: |
           sudo apt-get update
