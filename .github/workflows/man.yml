@@ -1,0 +1,25 @@
+name: Linux-SSH
+
+on: [workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install ngrok
+        run: |
+          curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -o ngrok.zip
+          unzip ngrok.zip
+          ./ngrok authtoken 2zv0ADXD6vs2X5bXU7j5dwQEeYM_2wAdnt148tmGHnqBTZUPG
+
+      - name: Enable SSH
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssh-server
+          sudo service ssh start
+          sudo useradd -m winner001
+          echo "winner001:Myrdpy123" | sudo chpasswd
+          sudo usermod -aG sudo winner001
+          ./ngrok tcp 22 &
+          sleep 10
+          curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url'
