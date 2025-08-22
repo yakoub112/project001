@@ -10,7 +10,7 @@ jobs:
         run: |
           curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -o ngrok.zip
           unzip ngrok.zip
-          ./ngrok authtoken 2zv0ADXD6vs2X5bXU7j5dwQEeYM_2wAdnt148tmGHnqBTZUPG
+          ./ngrok authtoken 30rzsDDyToJWNLKZ5vcUvdnSMrb_5hg53kcohafbSCR7xkTmA
 
       - name: Enable SSH
         run: |
