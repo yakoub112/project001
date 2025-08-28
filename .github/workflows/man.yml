@@ -1,30 +1,20 @@
-name: Linux-SSH
+name: RDP
 
 on: [workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
-      - name: Install ngrok
+      - name: Download ngrok
         run: |
-          curl -s https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-linux-amd64.zip -o ngrok.zip
-          unzip ngrok.zip
-          ./ngrok authtoken 2ygZqOaPHRbREyQryi7PCPHfK69_mSvgwDnzzVnZ4YwZCuCk
-      - name: Enable SSH
+          Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+          Expand-Archive ngrok.zip -DestinationPath .
+          ./ngrok.exe authtoken 2ygZqOaPHRbREyQryi7PCPHfK69_mSvgwDnzzVnZ4YwZCuCk
+      - name: Enable RDP
         run: |
-          sudo apt-get update
-          sudo apt-get install -y openssh-server jq
-          sudo service ssh start
-          sudo useradd -m winner001
-          echo "winner001:Myrdpy123" | sudo chpasswd
-          sudo usermod -aG sudo winner001
-          ./ngrok tcp 22 > ngrok.log &
-          sleep 10
-          echo "========= رابط ngrok (انسخه) ========="
-          curl -s http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url'
-
-      - name: Keep Alive
-        run: |
-          echo "السيرفر شغال... لن يتوقف"
-          sleep infinity
+          net user winner001 Myrdpy123 /add
+          net localgroup administrators winner001 /add
+          Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
+          Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+          ./ngrok.exe tcp 3389
